@@ -1,6 +1,3 @@
-"""Implementation of ResNet train and eval on ImageNet-100"""
-"""The implementation code is partially based on SupContrast GitHub repo"""
-
 from __future__ import print_function
 
 import os
