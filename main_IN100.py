@@ -117,12 +117,12 @@ def set_loader(opt):
                                      std=[0.229, 0.224, 0.225])
 
 
-    train_datasets = [datasets.ImageFolder(opt.traindirs, transform=transforms.Compose([
+    train_datasets = [datasets.ImageFolder(folder, transform=transforms.Compose([
             transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             normalize,
-        ])) for folder in train_folders]
+        ])) for folder in opt.traindirs]
 
     # Combine datasets into one
     combined_train_dataset = ConcatDataset(train_datasets)
