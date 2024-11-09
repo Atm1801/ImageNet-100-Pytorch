@@ -68,10 +68,10 @@ def parse_option():
 
     opt = parser.parse_args()
 
-    opt.traindirs = glob.glob(os.path.join(opt.data_folder, 'train.X*'))
+    opt.traindirs = glob.glob(os.path.join(opt.data_folder, '/kaggle/input/imagenet100/train.X*'))
     
     # set the path according to the environment
-    opt.valdir =  os.path.join(opt.data_folder, 'val.X')
+    opt.valdir =  os.path.join(opt.data_folder, '/kaggle/input/imagenet100/val.X')
 
 
     opt.model_path = './save/{}_models'.format(opt.dataset)
