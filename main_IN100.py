@@ -15,6 +15,11 @@ from util import adjust_learning_rate, warmup_learning_rate, accuracy
 from util import set_optimizer, save_model
 from networks.resnet import ResNet_Model
 
+import glob
+from torch.utils.data import ConcatDataset
+from torchvision.datasets import ImageFolder
+from torchvision import transforms
+
 try:
     import apex
     from apex import amp, optimizers
@@ -63,9 +68,10 @@ def parse_option():
 
     opt = parser.parse_args()
 
+    opt.traindirs = glob.glob(os.path.join(opt.data_folder, 'train.X*'))
+    
     # set the path according to the environment
-    opt.traindir = os.path.join(opt.data_folder, 'train')
-    opt.valdir =  os.path.join(opt.data_folder, 'val')
+    opt.valdir =  os.path.join(opt.data_folder, 'val.X')
 
 
     opt.model_path = './save/{}_models'.format(opt.dataset)
@@ -109,14 +115,17 @@ def parse_option():
 def set_loader(opt):
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])
-    train_dataset = datasets.ImageFolder(
-        opt.traindir,
-        transform=transforms.Compose([
+
+
+    train_datasets = [datasets.ImageFolder(opt.traindirs, transform=transforms.Compose([
             transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             normalize,
-        ]))
+        ])) for folder in train_folders]
+
+    # Combine datasets into one
+    combined_train_dataset = ConcatDataset(train_datasets)
     val_dataset = datasets.ImageFolder(
         opt.valdir,
         transform=transforms.Compose([
