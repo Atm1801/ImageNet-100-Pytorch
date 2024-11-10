@@ -125,7 +125,7 @@ def set_loader(opt):
         ])) for folder in opt.traindirs]
 
     # Combine datasets into one
-    combined_train_dataset = ConcatDataset(train_datasets)
+    train_dataset = ConcatDataset(train_datasets)
     val_dataset = datasets.ImageFolder(
         opt.valdir,
         transform=transforms.Compose([
